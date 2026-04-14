@@ -233,7 +233,7 @@ def root() -> HTMLResponse:
       runBtn.addEventListener("click", async () => {
         const prompt = document.getElementById("prompt").value.trim();
         const candidate = document.getElementById("candidate").value.trim();
-        const endpoint = endpointSelect.value === "Advanced (includes technical trace)" ? "/arbitrate/trace" : endpointSelect.value;
+        const endpoint = endpointSelect.value === "/arbitrate/trace" ? "/arbitrate/trace" : "/arbitrate";
         const apiKey = document.getElementById("apiKey").value.trim();
 
         if (!prompt || !candidate) {
