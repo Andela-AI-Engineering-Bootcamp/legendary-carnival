@@ -10,6 +10,27 @@ pinned: false
 
 # LLM Output Arbitration System
 
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&pause=1000&color=7AA2FF&center=true&vCenter=true&width=900&lines=Multi-critic+quality+gate+for+LLM+answers;FastAPI+%2B+OpenRouter+%2B+SQLite+audit+logging;Public+API+with+trace%2C+auth%2C+and+rate+limits" alt="Typing SVG" />
+</p>
+
+<p align="center">
+  <a href="https://franck-asket-llm-output-arbitration-api.hf.space">
+    <img alt="Live on Hugging Face" src="https://img.shields.io/badge/Hugging%20Face-Live%20Space-FFD21E?logo=huggingface&logoColor=black" />
+  </a>
+  <a href="https://franck-asket-llm-output-arbitration-api.hf.space/docs">
+    <img alt="API Docs" src="https://img.shields.io/badge/API-Docs-4C6FFF?logo=fastapi&logoColor=white" />
+  </a>
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white" />
+  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-Production-009688?logo=fastapi&logoColor=white" />
+</p>
+
+## Live App
+
+- **Hugging Face Space:** [franck-asket/llm-output-arbitration-api](https://franck-asket-llm-output-arbitration-api.hf.space)
+- **Interactive API Docs:** [Swagger UI](https://franck-asket-llm-output-arbitration-api.hf.space/docs)
+- **Health Check:** [GET /health](https://franck-asket-llm-output-arbitration-api.hf.space/health)
+
 Multi-agent arbitration pipeline that critiques a candidate LLM response with
 specialized evaluators, then synthesizes those critiques into a confidence-based
 verdict.
