@@ -1,5 +1,6 @@
 from app.arbitrator import arbitrate, arbitrate_with_trace
 from app.config import get_settings
+from app.critics import completeness_critic
 from app.schemas import VerdictLabel
 
 
@@ -41,3 +42,16 @@ def test_arbitrate_with_trace_includes_per_critic_metadata() -> None:
         "logical_consistency",
         "completeness",
     }
+
+
+def test_completeness_critic_uses_symmetric_word_filtering() -> None:
+    report = completeness_critic(
+        prompt="Can AI, ML, and NLP work together for coding tasks?",
+        response=(
+            "AI and NLP can work together in coding tasks. "
+            "Teams combine AI and NLP methods for better coding workflows."
+        ),
+    )
+
+    high_issues = [issue for issue in report.issues if issue.severity.value == "high"]
+    assert not high_issues

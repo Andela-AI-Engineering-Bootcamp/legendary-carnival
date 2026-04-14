@@ -8,6 +8,15 @@ from app.openrouter import OpenRouterClient
 from app.schemas import CriticTrace, CritiqueIssue, CritiqueReport, Severity
 
 
+def _normalized_words(text: str, min_length: int = 5) -> set[str]:
+    words = set()
+    for raw_word in text.split():
+        normalized = raw_word.strip(".,?!:;").lower()
+        if len(normalized) >= min_length:
+            words.add(normalized)
+    return words
+
+
 def factual_accuracy_critic(prompt: str, response: str) -> CritiqueReport:
     issues: list[CritiqueIssue] = []
     lower = response.lower()
@@ -81,8 +90,8 @@ def logical_consistency_critic(prompt: str, response: str) -> CritiqueReport:
 def completeness_critic(prompt: str, response: str) -> CritiqueReport:
     issues: list[CritiqueIssue] = []
 
-    prompt_words = {w.strip(".,?!:;").lower() for w in prompt.split() if len(w) > 4}
-    response_words = {w.strip(".,?!:;").lower() for w in response.split()}
+    prompt_words = _normalized_words(prompt)
+    response_words = _normalized_words(response)
 
     if prompt_words:
         overlap_ratio = len(prompt_words & response_words) / len(prompt_words)
