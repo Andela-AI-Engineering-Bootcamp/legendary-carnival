@@ -48,3 +48,18 @@ class ArbitrationVerdict(BaseModel):
 class ArbitrationResponse(BaseModel):
     request_id: str
     verdict: ArbitrationVerdict
+
+
+class CriticTrace(BaseModel):
+    critic_name: str
+    dimension: str
+    model: str
+    source: str
+    latency_ms: float = Field(ge=0.0)
+    error: str | None = None
+
+
+class ArbitrationTraceResponse(BaseModel):
+    request_id: str
+    verdict: ArbitrationVerdict
+    traces: List[CriticTrace]

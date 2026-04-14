@@ -3,12 +3,15 @@ from __future__ import annotations
 import uuid
 from statistics import mean
 
-from app.critics import (
-    completeness_critic,
-    factual_accuracy_critic,
-    logical_consistency_critic,
+from app.config import Settings
+from app.critics import run_critics, run_critics_with_trace
+from app.schemas import (
+    ArbitrationResponse,
+    ArbitrationTraceResponse,
+    ArbitrationVerdict,
+    CritiqueReport,
+    VerdictLabel,
 )
-from app.schemas import ArbitrationResponse, ArbitrationVerdict, VerdictLabel
 
 
 def _label_for_score(score: float) -> VerdictLabel:
@@ -19,13 +22,7 @@ def _label_for_score(score: float) -> VerdictLabel:
     return VerdictLabel.fail
 
 
-def arbitrate(prompt: str, candidate_response: str) -> ArbitrationResponse:
-    critiques = [
-        factual_accuracy_critic(prompt, candidate_response),
-        logical_consistency_critic(prompt, candidate_response),
-        completeness_critic(prompt, candidate_response),
-    ]
-
+def _build_verdict(critiques: list[CritiqueReport]) -> ArbitrationVerdict:
     overall_score = mean([c.score for c in critiques]) if critiques else 0.0
     label = _label_for_score(overall_score)
     confidence = min(1.0, max(0.0, 0.6 + (overall_score - 0.5)))
@@ -36,11 +33,42 @@ def arbitrate(prompt: str, candidate_response: str) -> ArbitrationResponse:
         f"Average critic score: {overall_score:.2f}."
     )
 
-    verdict = ArbitrationVerdict(
+    return ArbitrationVerdict(
         label=label,
         confidence=confidence,
         overall_score=overall_score,
         summary=summary,
         critiques=critiques,
     )
+
+
+def arbitrate(
+    prompt: str,
+    candidate_response: str,
+    settings: Settings,
+) -> ArbitrationResponse:
+    critiques = run_critics(
+        prompt=prompt,
+        candidate_response=candidate_response,
+        settings=settings,
+    )
+    verdict = _build_verdict(critiques)
     return ArbitrationResponse(request_id=str(uuid.uuid4()), verdict=verdict)
+
+
+def arbitrate_with_trace(
+    prompt: str,
+    candidate_response: str,
+    settings: Settings,
+) -> ArbitrationTraceResponse:
+    critiques, traces = run_critics_with_trace(
+        prompt=prompt,
+        candidate_response=candidate_response,
+        settings=settings,
+    )
+    verdict = _build_verdict(critiques)
+    return ArbitrationTraceResponse(
+        request_id=str(uuid.uuid4()),
+        verdict=verdict,
+        traces=traces,
+    )

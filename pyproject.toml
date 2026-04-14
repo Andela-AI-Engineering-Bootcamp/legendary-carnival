@@ -10,17 +10,21 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
   "fastapi",
+  "httpx",
   "pydantic>=2",
   "sqlalchemy",
+  "streamlit",
   "uvicorn",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "httpx",
   "pytest",
 ]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
