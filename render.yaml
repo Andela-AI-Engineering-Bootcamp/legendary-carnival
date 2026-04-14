@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: llm-output-arbitration-api
+    env: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_BASE_URL
+        value: https://openrouter.ai/api/v1
+      - key: OPENROUTER_APP_NAME
+        value: llm-output-arbitration-system
+      - key: OPENROUTER_SITE_URL
+        sync: false
+      - key: OPENROUTER_MODEL_FACTUAL
+        value: openai/gpt-4o-mini
+      - key: OPENROUTER_MODEL_LOGICAL
+        value: openai/gpt-4o-mini
+      - key: OPENROUTER_MODEL_COMPLETENESS
+        value: openai/gpt-4o-mini
+      - key: CORS_ALLOW_ORIGINS
+        value: "*"
