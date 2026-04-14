@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 from app.arbitrator import arbitrate, arbitrate_with_trace
 from app.config import get_settings
@@ -59,6 +60,11 @@ def _require_rate_limit(request: Request, response: Response) -> None:
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/", include_in_schema=False)
+def root() -> RedirectResponse:
+    return RedirectResponse(url="/docs")
 
 
 @app.post(
