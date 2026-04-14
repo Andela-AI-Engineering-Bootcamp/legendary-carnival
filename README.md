@@ -43,10 +43,10 @@ flowchart LR
     C2 --> D
     C3 --> D
     D --> E[Unified Verdict]
-    E --> F1[/v1/arbitrate]
-    E --> F2[/v1/arbitrate/batch]
-    E --> F3[/v1/arbitrations/id]
-    E --> F4[/v1/analytics]
+    E --> F1["/v1/arbitrate"]
+    E --> F2["/v1/arbitrate/batch"]
+    E --> F3["/v1/arbitrations/{id}"]
+    E --> F4["/v1/analytics"]
     E --> G[Verdict Explorer UI]
     E --> H[(SQLite Audit + Analytics)]
 ```
