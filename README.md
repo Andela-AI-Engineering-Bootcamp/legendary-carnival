@@ -1,3 +1,12 @@
+---
+title: LLM Output Arbitration API
+emoji: "🧠"
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+pinned: false
+---
+
 # LLM Output Arbitration System
 
 Multi-agent arbitration pipeline that critiques a candidate LLM response with
