@@ -1,0 +1,30 @@
+[
+  {
+    "id": "factually_incorrect",
+    "title": "Factually incorrect response",
+    "prompt": "Explain why the sky appears blue.",
+    "candidate_response": "The sky is blue because oceans reflect their color onto the atmosphere and this is always true.",
+    "notes": "Contains a planted factual error and absolute claim."
+  },
+  {
+    "id": "logically_flawed",
+    "title": "Logically flawed argument",
+    "prompt": "Should all software teams enforce code review? Explain your reasoning.",
+    "candidate_response": "Every team must enforce code review because it is optional in fast-moving teams, therefore mandatory reviews are unnecessary but still required.",
+    "notes": "Contains self-contradiction in reasoning chain."
+  },
+  {
+    "id": "misses_point",
+    "title": "Technically answers but misses point",
+    "prompt": "How can a startup reduce cloud costs in the next 30 days without hurting reliability?",
+    "candidate_response": "Cloud providers have many services. Startups should learn AWS, Azure, and GCP documentation and understand cloud history.",
+    "notes": "Surface-level response that fails the practical requirement."
+  },
+  {
+    "id": "good_response",
+    "title": "High-quality response",
+    "prompt": "How can a startup reduce cloud costs in the next 30 days without hurting reliability?",
+    "candidate_response": "In 30 days, start by rightsizing over-provisioned compute based on 7-day usage metrics, adding autoscaling floors to protect reliability, and deleting unattached storage snapshots. Next, turn on commitment planning for stable workloads and move bursty jobs to spot/preemptible capacity with fallback nodes. Finally, enforce cost alerts and weekly reliability checks (latency, error rate, and incident counts) to confirm savings do not degrade service quality.",
+    "notes": "Balanced, complete answer with practical steps and reliability safeguards."
+  }
+]

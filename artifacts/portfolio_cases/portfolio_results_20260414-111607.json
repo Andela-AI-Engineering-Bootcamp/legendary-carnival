@@ -1,0 +1,529 @@
+[
+  {
+    "case_id": "factually_incorrect",
+    "title": "Factually incorrect response",
+    "notes": "Contains a planted factual error and absolute claim.",
+    "result": {
+      "request_id": "056c18d2-d421-46ee-aa80-2ff081168f16",
+      "verdict": {
+        "label": "review",
+        "confidence": 0.7666666666666666,
+        "overall_score": 0.6666666666666666,
+        "overall_quality_score_10": 6.67,
+        "confidence_level": "medium",
+        "summary": "Quality score 6.67/10 with 0 confirmed issue(s) and 4 dismissed flag(s). Adjudicator reviewed disagreements across critics.",
+        "critiques": [
+          {
+            "critic_name": "Factual Accuracy Critic",
+            "dimension": "factual_accuracy",
+            "score": 0.6,
+            "issues": [
+              {
+                "quote": "always/never",
+                "description": "Absolute claim may be unreliable without supporting evidence.",
+                "severity": "medium"
+              },
+              {
+                "quote": "The sky is blue because oceans reflect their color onto the atmosphere and this ",
+                "description": "No source signal or grounding marker found in response.",
+                "severity": "low"
+              }
+            ],
+            "rationale": "Checks for unsupported absolutes and grounding cues."
+          },
+          {
+            "critic_name": "Logical Consistency Critic",
+            "dimension": "logical_consistency",
+            "score": 1.0,
+            "issues": [],
+            "rationale": "Checks contradiction patterns and reasoning flow coherence."
+          },
+          {
+            "critic_name": "Completeness Critic",
+            "dimension": "completeness",
+            "score": 0.4,
+            "issues": [
+              {
+                "quote": "The sky is blue because oceans reflect their color onto the atmosphere and this is always ",
+                "description": "Low topic overlap with prompt suggests missing coverage.",
+                "severity": "high"
+              },
+              {
+                "quote": "The sky is blue because oceans reflect their color onto the atmosphere and this is always true.",
+                "description": "Response is brief and may skip important parts.",
+                "severity": "medium"
+              }
+            ],
+            "rationale": "Checks topical coverage and minimum answer depth."
+          }
+        ],
+        "disagreements": [
+          {
+            "issue_description": "Absolute claim may be unreliable without supporting evidence.",
+            "raised_by": [
+              "Factual Accuracy Critic"
+            ],
+            "dismissed_by": [
+              "Logical Consistency Critic",
+              "Completeness Critic"
+            ],
+            "disagreement_type": "factual_claim"
+          },
+          {
+            "issue_description": "No source signal or grounding marker found in response.",
+            "raised_by": [
+              "Factual Accuracy Critic"
+            ],
+            "dismissed_by": [
+              "Logical Consistency Critic",
+              "Completeness Critic"
+            ],
+            "disagreement_type": "factual_claim"
+          },
+          {
+            "issue_description": "Low topic overlap with prompt suggests missing coverage.",
+            "raised_by": [
+              "Completeness Critic"
+            ],
+            "dismissed_by": [
+              "Factual Accuracy Critic",
+              "Logical Consistency Critic"
+            ],
+            "disagreement_type": "completeness"
+          },
+          {
+            "issue_description": "Response is brief and may skip important parts.",
+            "raised_by": [
+              "Completeness Critic"
+            ],
+            "dismissed_by": [
+              "Factual Accuracy Critic",
+              "Logical Consistency Critic"
+            ],
+            "disagreement_type": "completeness"
+          }
+        ],
+        "confirmed_issues": [],
+        "dismissed_flags": [
+          {
+            "issue": "Absolute claim may be unreliable without supporting evidence.",
+            "raised_by": "Factual Accuracy Critic",
+            "dismissal_reason": "Not corroborated by other critics after adjudicator reviewed factual, logical, and completeness evidence."
+          },
+          {
+            "issue": "No source signal or grounding marker found in response.",
+            "raised_by": "Factual Accuracy Critic",
+            "dismissal_reason": "Not corroborated by other critics after adjudicator reviewed factual, logical, and completeness evidence."
+          },
+          {
+            "issue": "Low topic overlap with prompt suggests missing coverage.",
+            "raised_by": "Completeness Critic",
+            "dismissal_reason": "Not corroborated by other critics after adjudicator reviewed factual, logical, and completeness evidence."
+          },
+          {
+            "issue": "Response is brief and may skip important parts.",
+            "raised_by": "Completeness Critic",
+            "dismissal_reason": "Not corroborated by other critics after adjudicator reviewed factual, logical, and completeness evidence."
+          }
+        ]
+      },
+      "traces": [
+        {
+          "critic_name": "Factual Accuracy Critic",
+          "dimension": "factual_accuracy",
+          "model": "heuristic",
+          "source": "fallback_no_key",
+          "latency_ms": 0.0,
+          "error": null
+        },
+        {
+          "critic_name": "Logical Consistency Critic",
+          "dimension": "logical_consistency",
+          "model": "heuristic",
+          "source": "fallback_no_key",
+          "latency_ms": 0.0,
+          "error": null
+        },
+        {
+          "critic_name": "Completeness Critic",
+          "dimension": "completeness",
+          "model": "heuristic",
+          "source": "fallback_no_key",
+          "latency_ms": 0.0,
+          "error": null
+        }
+      ]
+    }
+  },
+  {
+    "case_id": "logically_flawed",
+    "title": "Logically flawed argument",
+    "notes": "Contains self-contradiction in reasoning chain.",
+    "result": {
+      "request_id": "8946acc2-462e-40d3-81bc-3ddb9b96b248",
+      "verdict": {
+        "label": "pass",
+        "confidence": 0.95,
+        "overall_score": 0.85,
+        "overall_quality_score_10": 8.5,
+        "confidence_level": "high",
+        "summary": "Quality score 8.5/10 with 0 confirmed issue(s) and 2 dismissed flag(s). Adjudicator reviewed disagreements across critics.",
+        "critiques": [
+          {
+            "critic_name": "Factual Accuracy Critic",
+            "dimension": "factual_accuracy",
+            "score": 0.8,
+            "issues": [
+              {
+                "quote": "Every team must enforce code review because it is optional in fast-moving teams,",
+                "description": "No source signal or grounding marker found in response.",
+                "severity": "low"
+              }
+            ],
+            "rationale": "Checks for unsupported absolutes and grounding cues."
+          },
+          {
+            "critic_name": "Logical Consistency Critic",
+            "dimension": "logical_consistency",
+            "score": 0.75,
+            "issues": [
+              {
+                "quote": "must ... optional",
+                "description": "Potential internal contradiction detected.",
+                "severity": "high"
+              }
+            ],
+            "rationale": "Checks contradiction patterns and reasoning flow coherence."
+          },
+          {
+            "critic_name": "Completeness Critic",
+            "dimension": "completeness",
+            "score": 1.0,
+            "issues": [],
+            "rationale": "Checks topical coverage and minimum answer depth."
+          }
+        ],
+        "disagreements": [
+          {
+            "issue_description": "No source signal or grounding marker found in response.",
+            "raised_by": [
+              "Factual Accuracy Critic"
+            ],
+            "dismissed_by": [
+              "Logical Consistency Critic",
+              "Completeness Critic"
+            ],
+            "disagreement_type": "factual_claim"
+          },
+          {
+            "issue_description": "Potential internal contradiction detected.",
+            "raised_by": [
+              "Logical Consistency Critic"
+            ],
+            "dismissed_by": [
+              "Factual Accuracy Critic",
+              "Completeness Critic"
+            ],
+            "disagreement_type": "logic_chain"
+          }
+        ],
+        "confirmed_issues": [],
+        "dismissed_flags": [
+          {
+            "issue": "No source signal or grounding marker found in response.",
+            "raised_by": "Factual Accuracy Critic",
+            "dismissal_reason": "Not corroborated by other critics after adjudicator reviewed factual, logical, and completeness evidence."
+          },
+          {
+            "issue": "Potential internal contradiction detected.",
+            "raised_by": "Logical Consistency Critic",
+            "dismissal_reason": "Not corroborated by other critics after adjudicator reviewed factual, logical, and completeness evidence."
+          }
+        ]
+      },
+      "traces": [
+        {
+          "critic_name": "Factual Accuracy Critic",
+          "dimension": "factual_accuracy",
+          "model": "heuristic",
+          "source": "fallback_no_key",
+          "latency_ms": 0.0,
+          "error": null
+        },
+        {
+          "critic_name": "Logical Consistency Critic",
+          "dimension": "logical_consistency",
+          "model": "heuristic",
+          "source": "fallback_no_key",
+          "latency_ms": 0.0,
+          "error": null
+        },
+        {
+          "critic_name": "Completeness Critic",
+          "dimension": "completeness",
+          "model": "heuristic",
+          "source": "fallback_no_key",
+          "latency_ms": 0.0,
+          "error": null
+        }
+      ]
+    }
+  },
+  {
+    "case_id": "misses_point",
+    "title": "Technically answers but misses point",
+    "notes": "Surface-level response that fails the practical requirement.",
+    "result": {
+      "request_id": "30552d0f-c161-4f0a-9eb8-2b46961cc128",
+      "verdict": {
+        "label": "review",
+        "confidence": 0.8333333333333334,
+        "overall_score": 0.7333333333333334,
+        "overall_quality_score_10": 7.33,
+        "confidence_level": "high",
+        "summary": "Quality score 7.33/10 with 1 confirmed issue(s) and 2 dismissed flag(s). Adjudicator reviewed disagreements across critics.",
+        "critiques": [
+          {
+            "critic_name": "Factual Accuracy Critic",
+            "dimension": "factual_accuracy",
+            "score": 0.8,
+            "issues": [
+              {
+                "quote": "Cloud providers have many services. Startups should learn AWS, Azure, and GCP do",
+                "description": "No source signal or grounding marker found in response.",
+                "severity": "low"
+              }
+            ],
+            "rationale": "Checks for unsupported absolutes and grounding cues."
+          },
+          {
+            "critic_name": "Logical Consistency Critic",
+            "dimension": "logical_consistency",
+            "score": 1.0,
+            "issues": [],
+            "rationale": "Checks contradiction patterns and reasoning flow coherence."
+          },
+          {
+            "critic_name": "Completeness Critic",
+            "dimension": "completeness",
+            "score": 0.4,
+            "issues": [
+              {
+                "quote": "Cloud providers have many services. Startups should learn AWS, Azure, and GCP documentatio",
+                "description": "Low topic overlap with prompt suggests missing coverage.",
+                "severity": "high"
+              },
+              {
+                "quote": "Cloud providers have many services. Startups should learn AWS, Azure, and GCP documentation and understand cloud history.",
+                "description": "Response is brief and may skip important parts.",
+                "severity": "medium"
+              }
+            ],
+            "rationale": "Checks topical coverage and minimum answer depth."
+          }
+        ],
+        "disagreements": [
+          {
+            "issue_description": "No source signal or grounding marker found in response.",
+            "raised_by": [
+              "Factual Accuracy Critic"
+            ],
+            "dismissed_by": [
+              "Logical Consistency Critic",
+              "Completeness Critic"
+            ],
+            "disagreement_type": "factual_claim"
+          },
+          {
+            "issue_description": "Low topic overlap with prompt suggests missing coverage.",
+            "raised_by": [
+              "Completeness Critic"
+            ],
+            "dismissed_by": [
+              "Factual Accuracy Critic",
+              "Logical Consistency Critic"
+            ],
+            "disagreement_type": "completeness"
+          },
+          {
+            "issue_description": "Response is brief and may skip important parts.",
+            "raised_by": [
+              "Completeness Critic"
+            ],
+            "dismissed_by": [
+              "Factual Accuracy Critic",
+              "Logical Consistency Critic"
+            ],
+            "disagreement_type": "completeness"
+          }
+        ],
+        "confirmed_issues": [
+          {
+            "issue": "Low topic overlap with prompt suggests missing coverage.",
+            "severity": "high",
+            "evidence": "Single high-severity completeness flag confirmed after adjudicator re-checked prompt coverage.",
+            "confirmed_by": [
+              "Completeness Critic"
+            ]
+          }
+        ],
+        "dismissed_flags": [
+          {
+            "issue": "No source signal or grounding marker found in response.",
+            "raised_by": "Factual Accuracy Critic",
+            "dismissal_reason": "Not corroborated by other critics after adjudicator reviewed factual, logical, and completeness evidence."
+          },
+          {
+            "issue": "Response is brief and may skip important parts.",
+            "raised_by": "Completeness Critic",
+            "dismissal_reason": "Not corroborated by other critics after adjudicator reviewed factual, logical, and completeness evidence."
+          }
+        ]
+      },
+      "traces": [
+        {
+          "critic_name": "Factual Accuracy Critic",
+          "dimension": "factual_accuracy",
+          "model": "heuristic",
+          "source": "fallback_no_key",
+          "latency_ms": 0.0,
+          "error": null
+        },
+        {
+          "critic_name": "Logical Consistency Critic",
+          "dimension": "logical_consistency",
+          "model": "heuristic",
+          "source": "fallback_no_key",
+          "latency_ms": 0.0,
+          "error": null
+        },
+        {
+          "critic_name": "Completeness Critic",
+          "dimension": "completeness",
+          "model": "heuristic",
+          "source": "fallback_no_key",
+          "latency_ms": 0.0,
+          "error": null
+        }
+      ]
+    }
+  },
+  {
+    "case_id": "good_response",
+    "title": "High-quality response",
+    "notes": "Balanced, complete answer with practical steps and reliability safeguards.",
+    "result": {
+      "request_id": "646f9101-b318-4053-816c-367d4bf1a62c",
+      "verdict": {
+        "label": "pass",
+        "confidence": 0.9333333333333333,
+        "overall_score": 0.8333333333333334,
+        "overall_quality_score_10": 8.33,
+        "confidence_level": "high",
+        "summary": "Quality score 8.33/10 with 1 confirmed issue(s) and 1 dismissed flag(s). Adjudicator reviewed disagreements across critics.",
+        "critiques": [
+          {
+            "critic_name": "Factual Accuracy Critic",
+            "dimension": "factual_accuracy",
+            "score": 0.8,
+            "issues": [
+              {
+                "quote": "In 30 days, start by rightsizing over-provisioned compute based on 7-day usage m",
+                "description": "No source signal or grounding marker found in response.",
+                "severity": "low"
+              }
+            ],
+            "rationale": "Checks for unsupported absolutes and grounding cues."
+          },
+          {
+            "critic_name": "Logical Consistency Critic",
+            "dimension": "logical_consistency",
+            "score": 1.0,
+            "issues": [],
+            "rationale": "Checks contradiction patterns and reasoning flow coherence."
+          },
+          {
+            "critic_name": "Completeness Critic",
+            "dimension": "completeness",
+            "score": 0.7,
+            "issues": [
+              {
+                "quote": "In 30 days, start by rightsizing over-provisioned compute based on 7-day usage metrics, ad",
+                "description": "Low topic overlap with prompt suggests missing coverage.",
+                "severity": "high"
+              }
+            ],
+            "rationale": "Checks topical coverage and minimum answer depth."
+          }
+        ],
+        "disagreements": [
+          {
+            "issue_description": "No source signal or grounding marker found in response.",
+            "raised_by": [
+              "Factual Accuracy Critic"
+            ],
+            "dismissed_by": [
+              "Logical Consistency Critic",
+              "Completeness Critic"
+            ],
+            "disagreement_type": "factual_claim"
+          },
+          {
+            "issue_description": "Low topic overlap with prompt suggests missing coverage.",
+            "raised_by": [
+              "Completeness Critic"
+            ],
+            "dismissed_by": [
+              "Factual Accuracy Critic",
+              "Logical Consistency Critic"
+            ],
+            "disagreement_type": "completeness"
+          }
+        ],
+        "confirmed_issues": [
+          {
+            "issue": "Low topic overlap with prompt suggests missing coverage.",
+            "severity": "high",
+            "evidence": "Single high-severity completeness flag confirmed after adjudicator re-checked prompt coverage.",
+            "confirmed_by": [
+              "Completeness Critic"
+            ]
+          }
+        ],
+        "dismissed_flags": [
+          {
+            "issue": "No source signal or grounding marker found in response.",
+            "raised_by": "Factual Accuracy Critic",
+            "dismissal_reason": "Not corroborated by other critics after adjudicator reviewed factual, logical, and completeness evidence."
+          }
+        ]
+      },
+      "traces": [
+        {
+          "critic_name": "Factual Accuracy Critic",
+          "dimension": "factual_accuracy",
+          "model": "heuristic",
+          "source": "fallback_no_key",
+          "latency_ms": 0.0,
+          "error": null
+        },
+        {
+          "critic_name": "Logical Consistency Critic",
+          "dimension": "logical_consistency",
+          "model": "heuristic",
+          "source": "fallback_no_key",
+          "latency_ms": 0.0,
+          "error": null
+        },
+        {
+          "critic_name": "Completeness Critic",
+          "dimension": "completeness",
+          "model": "heuristic",
+          "source": "fallback_no_key",
+          "latency_ms": 0.0,
+          "error": null
+        }
+      ]
+    }
+  }
+]

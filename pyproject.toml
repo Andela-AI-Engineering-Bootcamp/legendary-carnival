@@ -11,6 +11,7 @@ requires-python = ">=3.11"
 dependencies = [
   "fastapi",
   "httpx",
+  "langgraph",
   "pydantic>=2",
   "sqlalchemy",
   "streamlit",

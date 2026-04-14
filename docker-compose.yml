@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: llm-arbitration-api
+    ports:
+      - "8000:7860"
+    environment:
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
+      OPENROUTER_APP_NAME: ${OPENROUTER_APP_NAME:-llm-output-arbitration-system}
+      OPENROUTER_SITE_URL: ${OPENROUTER_SITE_URL:-}
+      OPENROUTER_MODEL_FACTUAL: ${OPENROUTER_MODEL_FACTUAL:-openai/gpt-4o-mini}
+      OPENROUTER_MODEL_LOGICAL: ${OPENROUTER_MODEL_LOGICAL:-openai/gpt-4o-mini}
+      OPENROUTER_MODEL_COMPLETENESS: ${OPENROUTER_MODEL_COMPLETENESS:-ollama/llama3.1}
+      CORS_ALLOW_ORIGINS: ${CORS_ALLOW_ORIGINS:-*}
+      DATABASE_URL: ${DATABASE_URL:-sqlite:////data/arbitration.db}
+      API_ACCESS_KEY: ${API_ACCESS_KEY:-}
+      RATE_LIMIT_REQUESTS: ${RATE_LIMIT_REQUESTS:-0}
+      RATE_LIMIT_WINDOW_SECONDS: ${RATE_LIMIT_WINDOW_SECONDS:-60}
+    volumes:
+      - arbitration_data:/data
+    depends_on:
+      - ollama
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+volumes:
+  arbitration_data:
+  ollama_data:

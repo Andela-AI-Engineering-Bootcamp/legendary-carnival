@@ -22,6 +22,10 @@ def test_arbitrate_returns_structured_verdict() -> None:
         VerdictLabel.fail,
     }
     assert len(result.verdict.critiques) == 3
+    assert 1.0 <= result.verdict.overall_quality_score_10 <= 10.0
+    assert result.verdict.confidence_level.value in {"low", "medium", "high"}
+    assert isinstance(result.verdict.confirmed_issues, list)
+    assert isinstance(result.verdict.dismissed_flags, list)
 
 
 def test_arbitrate_with_trace_includes_per_critic_metadata() -> None:

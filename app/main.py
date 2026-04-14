@@ -7,7 +7,14 @@ from fastapi.responses import HTMLResponse
 from app.arbitrator import arbitrate, arbitrate_with_trace
 from app.config import get_settings
 from app.rate_limit import InMemoryRateLimiter
-from app.schemas import ArbitrationRequest, ArbitrationResponse, ArbitrationTraceResponse
+from app.schemas import (
+    AnalyticsResponse,
+    ArbitrationRequest,
+    ArbitrationResponse,
+    ArbitrationTraceResponse,
+    BatchArbitrationRequest,
+    BatchArbitrationResponse,
+)
 from app.security import is_api_key_valid
 from app.storage import Storage
 
@@ -323,3 +330,54 @@ def run_arbitration_with_trace(request: ArbitrationRequest) -> ArbitrationTraceR
         ),
     )
     return result
+
+
+@app.post(
+    "/v1/arbitrate",
+    response_model=ArbitrationResponse,
+    dependencies=[Depends(_require_api_key), Depends(_require_rate_limit)],
+)
+def run_arbitration_v1(request: ArbitrationRequest) -> ArbitrationResponse:
+    return run_arbitration(request)
+
+
+@app.post(
+    "/v1/arbitrate/batch",
+    response_model=BatchArbitrationResponse,
+    dependencies=[Depends(_require_api_key), Depends(_require_rate_limit)],
+)
+def run_arbitration_batch_v1(request: BatchArbitrationRequest) -> BatchArbitrationResponse:
+    results: list[ArbitrationResponse] = []
+    for item in request.items:
+        result = arbitrate(
+            prompt=item.prompt,
+            candidate_response=item.candidate_response,
+            settings=settings,
+        )
+        storage.save(
+            prompt=item.prompt,
+            candidate_response=item.candidate_response,
+            arbitration_response=result,
+        )
+        results.append(result)
+    return BatchArbitrationResponse(results=results)
+
+
+@app.get(
+    "/v1/arbitrations/{request_id}",
+    dependencies=[Depends(_require_api_key), Depends(_require_rate_limit)],
+)
+def get_arbitration_v1(request_id: str) -> dict:
+    payload = storage.get_by_request_id(request_id)
+    if payload is None:
+        raise HTTPException(status_code=404, detail="Arbitration result not found.")
+    return payload
+
+
+@app.get(
+    "/v1/analytics",
+    response_model=AnalyticsResponse,
+    dependencies=[Depends(_require_api_key), Depends(_require_rate_limit)],
+)
+def get_analytics_v1() -> AnalyticsResponse:
+    return storage.get_analytics()

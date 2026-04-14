@@ -73,6 +73,55 @@ def _render_verdict(verdict: dict[str, Any]) -> None:
                     )
 
 
+def _render_annotated_output(candidate_response: str, verdict: dict[str, Any]) -> None:
+    st.subheader("Annotated Output")
+    confirmed = verdict.get("confirmed_issues", [])
+    dismissed = verdict.get("dismissed_flags", [])
+    annotated = candidate_response
+
+    for item in confirmed:
+        issue = item.get("issue", "")
+        if issue and issue in annotated:
+            annotated = annotated.replace(
+                issue,
+                f"🔴[{issue}]",
+                1,
+            )
+    for item in dismissed:
+        issue = item.get("issue", "")
+        if issue and issue in annotated:
+            annotated = annotated.replace(
+                issue,
+                f"🟡[{issue}]",
+                1,
+            )
+
+    st.markdown(
+        "Legend: 🔴 confirmed issue | 🟡 dismissed/low-confidence flag | 🟢 validated claims"
+    )
+    st.write(annotated)
+
+
+def _render_critic_comparison(verdict: dict[str, Any]) -> None:
+    st.subheader("Critic Comparison")
+    critiques = verdict.get("critiques", [])
+    if not critiques:
+        st.info("No critiques available.")
+        return
+
+    cols = st.columns(len(critiques))
+    for col, critique in zip(cols, critiques):
+        with col:
+            st.markdown(f"**{critique.get('critic_name', 'Critic')}**")
+            st.caption(f"Score: {float(critique.get('score', 0.0)):.2f}")
+            issues = critique.get("issues", [])
+            if issues:
+                for issue in issues:
+                    st.write(f"🟧 {issue.get('description', '')}")
+            else:
+                st.write("🟩 No issues")
+
+
 def _render_traces(traces: list[dict[str, Any]]) -> None:
     if not traces:
         st.info("No traces returned.")
@@ -104,6 +153,7 @@ def main() -> None:
         st.header("Configuration")
         api_base_url = st.text_input("API Base URL", value=DEFAULT_API_URL).rstrip("/")
         use_trace = st.toggle("Use trace endpoint", value=True)
+        use_v1 = st.toggle("Use v1 API routes", value=True)
         db_path = st.text_input("SQLite DB Path", value="arbitration.db")
 
         st.divider()
@@ -148,12 +198,25 @@ def main() -> None:
         height=180,
     )
 
+    st.subheader("Batch Mode")
+    batch_inputs = st.text_area(
+        "Batch Candidate Responses (one per line)",
+        value="",
+        height=120,
+        placeholder="Paste multiple candidate responses, each on a new line.",
+    )
+
     if st.button("Run Arbitration", type="primary"):
         if not prompt.strip() or not candidate_response.strip():
             st.error("Prompt and candidate response are required.")
             return
 
-        endpoint = "/arbitrate/trace" if use_trace else "/arbitrate"
+        if use_v1:
+            endpoint = "/v1/arbitrate/trace" if use_trace else "/v1/arbitrate"
+            if use_trace:
+                endpoint = "/arbitrate/trace"
+        else:
+            endpoint = "/arbitrate/trace" if use_trace else "/arbitrate"
         url = f"{api_base_url}{endpoint}"
         payload = {"prompt": prompt, "candidate_response": candidate_response}
         st.session_state.prompt_value = prompt
@@ -171,13 +234,57 @@ def main() -> None:
 
         st.success(f'Request ID: {result.get("request_id", "")}')
         verdict = result.get("verdict", {})
+        _render_annotated_output(candidate_response, verdict)
         _render_verdict(verdict)
+        _render_critic_comparison(verdict)
 
         if use_trace:
             _render_traces(result.get("traces", []))
 
         with st.expander("Raw JSON"):
             st.code(json.dumps(result, indent=2), language="json")
+
+    if st.button("Run Batch Arbitration"):
+        lines = [line.strip() for line in batch_inputs.splitlines() if line.strip()]
+        if not lines:
+            st.error("Please provide at least one candidate response in batch input.")
+            return
+
+        batch_endpoint = "/v1/arbitrate/batch"
+        batch_url = f"{api_base_url}{batch_endpoint}"
+        batch_payload = {
+            "items": [
+                {"prompt": prompt, "candidate_response": line}
+                for line in lines
+            ]
+        }
+        try:
+            with st.spinner("Running batch arbitration..."):
+                batch_result = _post_json(batch_url, batch_payload)
+        except httpx.HTTPStatusError as exc:
+            st.error(f"API error {exc.response.status_code}: {exc.response.text}")
+            return
+        except httpx.HTTPError as exc:
+            st.error(f"Connection error: {exc}")
+            return
+
+        rows = []
+        for item in batch_result.get("results", []):
+            verdict = item.get("verdict", {})
+            rows.append(
+                {
+                    "request_id": item.get("request_id", ""),
+                    "output_excerpt": item.get("verdict", {})
+                    .get("critiques", [{}])[0]
+                    .get("rationale", "")[:80],
+                    "overall_score": verdict.get("overall_score", 0.0),
+                    "overall_quality_score_10": verdict.get("overall_quality_score_10", 0.0),
+                    "issue_count": len(verdict.get("confirmed_issues", [])),
+                    "confidence": verdict.get("confidence", 0.0),
+                }
+            )
+        st.subheader("Batch Results")
+        st.dataframe(rows, use_container_width=True)
 
 
 if __name__ == "__main__":

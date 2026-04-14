@@ -31,6 +31,26 @@ pinned: false
 - **Interactive API Docs:** [Swagger UI](https://franck-asket-llm-output-arbitration-api.hf.space/docs)
 - **Health Check:** [GET /health](https://franck-asket-llm-output-arbitration-api.hf.space/health)
 
+## Architecture
+
+```mermaid
+flowchart LR
+    A[Input Prompt + Candidate Response] --> B[Critic Fan-out]
+    B --> C1[Factual Accuracy Critic]
+    B --> C2[Logical Consistency Critic]
+    B --> C3[Completeness Critic]
+    C1 --> D[Adjudicator Agent]
+    C2 --> D
+    C3 --> D
+    D --> E[Unified Verdict]
+    E --> F1[/v1/arbitrate]
+    E --> F2[/v1/arbitrate/batch]
+    E --> F3[/v1/arbitrations/id]
+    E --> F4[/v1/analytics]
+    E --> G[Verdict Explorer UI]
+    E --> H[(SQLite Audit + Analytics)]
+```
+
 Multi-agent arbitration pipeline that critiques a candidate LLM response with
 specialized evaluators, then synthesizes those critiques into a confidence-based
 verdict.
@@ -137,6 +157,38 @@ Returns the same verdict plus per-critic execution metadata:
 - latency in ms
 - fallback error (if any)
 
+## Phase 3-6 Additions
+
+- Adjudicator-backed verdict resolution with disagreement analysis:
+  - confirmed issues with evidence
+  - dismissed flags with overrule reasoning
+  - confidence level and 1-10 quality score
+- New versioned API routes:
+  - `POST /v1/arbitrate`
+  - `POST /v1/arbitrate/batch`
+  - `GET /v1/arbitrations/{id}`
+  - `GET /v1/analytics`
+- Verdict Explorer upgrades in Streamlit:
+  - annotated output view
+  - critic side-by-side comparison panel
+  - batch mode table
+- `docker-compose.yml` for full local stack:
+  - API service
+  - Ollama service for local model-backed completeness path
+
+## Portfolio Test Cases
+
+Run the four showcase cases (factually wrong, logically flawed, misses point, good response):
+
+```bash
+python scripts/run_portfolio_cases.py
+```
+
+Generated artifacts:
+
+- `artifacts/portfolio_cases/portfolio_results_*.json`
+- `artifacts/portfolio_cases/portfolio_summary_*.md`
+
 Public call example:
 
 ```bash
@@ -174,6 +226,12 @@ docker run -p 8000:8000 \
 ```
 
 Then expose the container URL publicly and call `/arbitrate` from any app.
+
+Run full local stack with Ollama:
+
+```bash
+docker compose up --build
+```
 
 ### Option 3: Hugging Face Spaces (Docker)
 
