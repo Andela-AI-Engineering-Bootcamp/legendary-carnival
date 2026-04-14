@@ -1,5 +1,6 @@
 ---
 title: LLM Output Arbitration API
+short_description: Multi-critic quality gate API that scores AI answers for factuality, logic, and completeness.
 emoji: "🧠"
 colorFrom: indigo
 colorTo: blue
