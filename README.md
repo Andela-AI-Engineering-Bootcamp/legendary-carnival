@@ -1,4 +1,4 @@
-# Project 5: LLM Output Arbitration System
+# LLM Output Arbitration System
 
 Multi-agent arbitration pipeline that critiques a candidate LLM response with
 specialized evaluators, then synthesizes those critiques into a confidence-based
